@@ -13,12 +13,13 @@ bool PARITY(unsigned x) {
 	return true;
 }
 
+/* ================================= 0x00 ---- 0x0f ================================ */
 void I::NOP() {
 	return;
 }
 
 
-void I::LXI_B_D() {
+void I::LXI_B() {
 	c = read(pc++);
 	b = read(pc++);
 }
@@ -60,7 +61,7 @@ void I::RLC() {
 void I::DAD_B() {
 	uint16_t res = HL() + BC();
 	setFlag(C, res > 255);
-	SET_HL((uint16_t)HL() + (uint16_t)BC());
+	SET_HL(res);
 }
 
 void I::LDAX_B() {
@@ -94,4 +95,89 @@ void I::RRC() {
 	a >>= 1;
 	a |= prevBit << 7;
 	setFlag(C, prevBit == 1);
+}
+
+/* ================================= 0x10 ---- 0x1f ================================ */
+
+// 0x10 not impl
+void I::LXI_D() {
+	e = read(pc++);
+	d = read(pc++);
+}
+
+void I::STAX_D() {
+	write(DE(), a);
+}
+
+void I::INX_D() {
+	SET_DE(DE()+1);
+}
+
+void I::INR_D() {
+	d = d + 1;
+	setFlag(Z, d == 0);
+	setFlag(S, (d & 0x80) != 0);
+	setFlag(P, PARITY(d));
+}
+
+void I::DCR_D() {
+	d = d - 1;
+	setFlag(Z, d == 0);
+	setFlag(S, (d & 0x80) != 0);
+	setFlag(P, PARITY(d));
+}
+
+void I::MVI_D() {
+	d = read(pc++);
+}
+
+void I::RAL() {
+	uint8_t prev = getFlag(C);
+	uint8_t prevSig = a & 0x80;
+	a <<= 1;
+	a |= prev;
+	setFlag(C, prevSig != 0);
+}
+
+// 0x18 // 
+
+
+void I::DAD_B() {
+	uint16_t res = HL() + DE();
+	setFlag(C, res > 255);
+	SET_HL(res);
+}
+
+void I::LDAX_D() {
+	a = read(DE());
+}
+
+void I::DCX_D() {
+	SET_DE(DE() - 1);
+}
+
+void I::INR_E() {
+	e = e + 1;
+	setFlag(Z, e == 0);
+	setFlag(S, (e & 0x80) != 0);
+	setFlag(P, PARITY(e));
+}
+
+void I::DCR_E() {
+	e = e - 1;
+	setFlag(Z, e == 0);
+	setFlag(S, (e & 0x80) != 0);
+	setFlag(P, PARITY(e));
+}
+
+void I::MVI_E() {
+	e = read(pc++);
+}
+
+void I::RAR() {
+	uint8_t prevSig = a & 0x80;
+	uint8_t prevZ = a & 0x01;
+	a >>= 1;
+	a |= prevSig;
+	setFlag(C, prevZ != 0);
 }

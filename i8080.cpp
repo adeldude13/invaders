@@ -9,7 +9,7 @@ void I8080::setFlag(Flags flag, bool b) {
 		f |= flag;
 		return;
 	}
-	f &= flag;
+	f &= ~(flag);
 }
 
 uint8_t I8080::getFlag(Flags flag) {

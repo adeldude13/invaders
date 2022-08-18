@@ -181,3 +181,80 @@ void I::RAR() {
 	a |= prevSig;
 	setFlag(C, prevZ != 0);
 }
+
+/* ================================= 0x20 ---- 0x2f ================================ */
+// 0x20
+
+void I::LXI_H() {
+	l = read(pc++);
+	h = read(pc++);
+}
+
+void I::SHLD_ADR() {
+	uint8_t lo = read(pc++);
+	uint8_t hi = read(pc++);
+	uint16_t addr = (hi << 8) | lo;
+	l = read(addr);
+	h = read(addr+1);
+}
+
+void I::INX_H() {
+	SET_HL(HL()+1);
+}
+
+void I::INR_H() {
+	h = h + 1;
+	setFlag(Z, h == 0);
+	setFlag(S, (h & 0x80) != 0);
+	setFlag(P, PARITY(h));
+}
+
+void I::DCR_H() {
+	h = h - 1;
+	setFlag(Z, h == 0);
+	setFlag(S, (h & 0x80) != 0);
+	setFlag(P, PARITY(h));
+}
+
+void I::MVI_H() {
+	h = read(pc++);
+}
+
+void I::DAA() {
+	// TODO
+}
+
+void I::DAD_H() {
+	// TODO	
+}
+
+void I::LDAX_D() {
+	a = read(DE());
+}
+
+void I::DCX_D() {
+	SET_DE(DE()-1);
+}
+
+
+void I::INR_L() {
+	l = l + 1;
+	setFlag(Z, l == 0);
+	setFlag(S, (l & 0x80) != 0);
+	setFlag(P, PARITY(l));
+}
+
+void I::DCR_L() {
+	l = l - 1;
+	setFlag(Z, l == 0);
+	setFlag(S, (l & 0x80) != 0);
+	setFlag(P, PARITY(l));
+}
+
+void I::MVI_L() {
+	l = read(pc++);
+}
+
+void I::CMA() {
+	a = ~a;
+}

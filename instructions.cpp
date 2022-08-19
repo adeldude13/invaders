@@ -258,3 +258,87 @@ void I::MVI_L() {
 void I::CMA() {
 	a = ~a;
 }
+
+
+/* ================================= 0x30 ---- 0x3f ================================ */
+// 0x30
+//
+
+void I::LXI_SP() {
+	uint8_t lo = read(pc++);
+	uint8_t hi = read(pc++);
+	sp = (hi << 8) | lo;
+}
+
+void I::STA_ADR() {
+	uint8_t lo = read(pc++);
+	uint8_t hi = read(pc++);
+	uint8_t addr = (hi << 8) | lo;
+	a = read(addr);
+}
+
+void I::INX_SP() {
+	sp++;
+}
+
+void I::INR_M() {
+	write(HL(), read(HL()) + 1);
+	uint8_t res = read(HL());
+	setFlag(Z, res == 0);
+	setFlag(S, (res & 0x80) != 0);
+	setFlag(P, PARITY(res));
+}
+
+void I::DCR_M() {
+	write(HL(), read(HL()) - 1);
+	uint8_t res = read(HL());
+	setFlag(Z, res == 0);
+	setFlag(S, (res & 0x80) != 0);
+	setFlag(P, PARITY(res));
+}
+
+void I::MVI_M() {
+	write(HL(), read(pc++));
+}
+
+void I::STC() {
+	setFlag(C, true);
+}
+
+void I::DAD_SP() {
+	uint64_t res = HL() + sp;
+	SET_HL(HL() + sp);
+	setFlag(C, res > 0xFFFF);
+}
+
+void I::LDA_ADR() {
+	uint8_t lo = read(pc++);
+	uint8_t hi = read(pc++);
+	a = read((hi << 8) | lo);
+}
+
+void I::DCX_SP() {
+	sp = sp - 1;
+}
+
+void I::INR_A() {
+	a = a + 1;
+	setFlag(Z, a == 0);
+	setFlag(S, (a & 0x80) != 0);
+	setFlag(P, PARITY(a));
+}
+
+void I::INR_A() {
+	a = a - 1;
+	setFlag(Z, a == 0);
+	setFlag(S, (a & 0x80) != 0);
+	setFlag(P, PARITY(a));
+}
+
+void I::MVI_A() {
+	a = read(pc++);
+}
+
+void I::CMC() {
+	setFlag(C, !getFlag(C));
+}

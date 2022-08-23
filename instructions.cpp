@@ -342,3 +342,273 @@ void I::MVI_A() {
 void I::CMC() {
 	setFlag(C, !getFlag(C));
 }
+
+/* ================================= 0x40 ---- 0x4f ================================ */
+
+void I::MOV_B_B() {
+	b = b;
+}
+
+void I::MOV_B_C() {
+	b = c;
+}
+
+void I::MOV_B_D() {
+	b = d;
+}
+
+void I::MOV_B_E() {
+	b = e;
+}
+
+void I::MOV_B_H() {
+	b = h;
+}
+
+void I::MOV_B_L() {
+	b = l;
+}
+
+void I::MOV_B_M() {
+	b = read(HL());
+}
+
+void I::MOV_B_A() {
+	b = a;
+}
+
+void I::MOV_C_B() {
+	c = b;
+}
+
+void I::MOV_C_C() {
+	c = c;
+}
+
+void I::MOV_C_D() {
+	c = d;
+}
+
+void I::MOV_C_E() {
+	c = e;
+}
+
+void I::MOV_C_H() {
+	c = h;
+}
+
+void I::MOV_C_L() {
+	c = l;
+}
+
+void I::MOV_C_M() {
+	c = read(HL());
+}
+
+void I::MOV_C_A() {
+	c = a;
+}
+
+/* ================================= 0x50 ---- 0x5f ================================ */
+
+void I::MOV_D_B() {
+	d = b;
+}
+
+void I::MOV_D_C() {
+	d = c;
+}
+
+void I::MOV_D_D() {
+	d = d;
+}
+
+void I::MOV_D_E() {
+	d = e;
+}
+
+void I::MOV_D_H() {
+	d = h;
+}
+
+void I::MOV_D_L() {
+	d = l;
+}
+
+void I::MOV_D_M() {
+	d = read(HL());
+}
+
+void I::MOV_D_A() {
+	d = a;
+}
+
+void I::MOV_E_B() {
+	e = b;
+}
+
+void I::MOV_E_C() {
+	e = c;
+}
+
+void I::MOV_E_D() {
+	e = d;
+}
+
+void I::MOV_E_E() {
+	e = e;
+}
+
+void I::MOV_E_H() {
+	e = h;
+}
+
+void I::MOV_E_L() {
+	e = l;
+}
+
+void I::MOV_E_M() {
+	e = read(HL());
+}
+
+void I::MOV_E_A() {
+	e = a;
+}
+
+/* ================================= 0x60 ---- 0x6f ================================ */
+
+void I::MOV_H_B() {
+	h = b;
+}
+
+void I::MOV_H_C() {
+	h = c;
+}
+
+void I::MOV_H_D() {
+	h = d;
+}
+
+void I::MOV_H_E() {
+	h = e;
+}
+
+void I::MOV_H_H() {
+	h = h;
+}
+
+void I::MOV_H_L() {
+	h = l;
+}
+
+void I::MOV_H_M() {
+	h = read(HL());
+}
+
+void I::MOV_H_A() {
+	h = a;
+}
+
+void I::MOV_L_B() {
+	l = b;
+}
+
+void I::MOV_L_C() {
+	l = c;
+}
+
+void I::MOV_L_D() {
+	l = d;
+}
+
+void I::MOV_L_E() {
+	l = e;
+}
+
+void I::MOV_L_H() {
+	l = h;
+}
+
+void I::MOV_L_L() {
+	l = l;
+}
+
+void I::MOV_L_M() {
+	l = read(HL());
+}
+
+void I::MOV_L_A() {
+	l = a;
+}
+
+/* ================================= 0x70 ---- 0x7f ================================ */
+
+void I::MOV_M_B() {
+	write(HL(), b);
+}
+
+void I::MOV_M_C() {
+	write(HL(), c);
+}
+
+void I::MOV_M_D() {
+	write(HL(), d);
+}
+
+void I::MOV_M_E() {
+	write(HL(), e);
+}
+
+void I::MOV_M_H() {
+	write(HL(), h);
+}
+
+void I::MOV_M_L() {
+	write(HL(), l);
+}
+
+void I::MOV_M_M() {
+	write(HL(), read(HL()));
+}
+
+void I::HLT() {
+	// TODO
+}
+
+void I::MOV_M_A() {
+	write(HL(), a);
+}
+
+void I::MOV_A_B() {
+	a = b;
+}
+
+void I::MOV_A_C() {
+	a = c;
+}
+
+void I::MOV_A_D() {
+	a = d;
+}
+
+void I::MOV_A_E() {
+	a = e;
+}
+
+void I::MOV_A_H() {
+	a = h;
+}
+
+void I::MOV_A_L() {
+	a = l;
+}
+
+void I::MOV_A_M() {
+	a = read(HL());
+}
+
+void I::MOV_A_A() {
+	a = a;
+}
+
+/* ================================= 0x80 ---- 0x8f =============================== */

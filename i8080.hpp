@@ -32,7 +32,10 @@ class I8080 {
 		void setFlag(Flags, bool); 
 		uint8_t getFlag(Flags);
 		uint8_t read(uint16_t addr); 
-		void write(uint16_t addr, uint8_t e); 
+		void write(uint16_t addr, uint8_t e);
+		void push8(uint8_t), push16(uint16_t);
+		uint8_t pop8();
+		uint16_t pop16();
 	private:
 		uint8_t a, b, c, d, e, h, l;
 		uint8_t f;

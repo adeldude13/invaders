@@ -612,3 +612,696 @@ void I::MOV_A_A() {
 }
 
 /* ================================= 0x80 ---- 0x8f =============================== */
+
+void I::ADD_B() {
+	uint32_t result = (uint16_t)a + (uint16_t)b;
+	a = a + b;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADD_C() {
+	uint32_t result = (uint16_t)a + (uint16_t)c;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADD_D() {
+	uint32_t result = (uint16_t)a + (uint16_t)d;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADD_E() {
+	uint32_t result = (uint16_t)a + (uint16_t)e;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADD_H() {
+	uint32_t result = (uint16_t)a + (uint16_t)h;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADD_L() {
+	uint32_t result = (uint16_t)a + (uint16_t)l;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADD_M() {
+	uint32_t result = (uint16_t)a + (uint16_t)read(HL());
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADD_A() {
+	uint32_t result = (uint16_t)a + (uint16_t)a;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADC_B() {
+	uint16_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a + (uint16_t)b + cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADC_C() {
+	uint16_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a + (uint16_t)c + cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADC_D() {
+	uint16_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a + (uint16_t)d + cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADC_E() {
+	uint16_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a + (uint16_t)e + cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADC_H() {
+	uint16_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a + (uint16_t)h + cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADC_L() {
+	uint16_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a + (uint16_t)l + cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADC_M() {
+	uint16_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a + (uint16_t)read(HL()) + cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::ADC_A() {
+	uint16_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a + (uint16_t)a + cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+/* ================================= 0x90 ---- 0x9f ================================ */
+
+void I::SUB_B() {
+	uint32_t result = (uint16_t)a - (uint16_t)b;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SUB_C() {
+	uint32_t result = (uint16_t)a - (uint16_t)c;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SUB_D() {
+	uint32_t result = (uint16_t)a - (uint16_t)d;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SUB_E() {
+	uint32_t result = (uint16_t)a - (uint16_t)e;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SUB_H() {
+	uint32_t result = (uint16_t)a - (uint16_t)h;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SUB_L() {
+	uint32_t result = (uint16_t)a - (uint16_t)l;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SUB_M() {
+	uint32_t result = (uint16_t)a - (uint16_t)read(HL());
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SUB_A() {
+	uint32_t result = (uint16_t)a - (uint16_t)a;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SBB_B() {
+	uint8_t cyy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)b - c;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SBB_C() {
+	uint8_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)c - cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SBB_D() {
+	uint8_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)d - cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SBB_E() {
+	uint8_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)e - cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SBB_H() {
+	uint8_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)h - cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SBB_L() {
+	uint8_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)l - cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SBB_M() {
+	uint8_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)read(HL()) - cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::SBB_A() {
+	uint8_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)a - cy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+/* ================================= 0xA0 ---- 0xAf ================================ */
+
+void I::ANA_B() {
+	 a &= b;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+}
+
+void I::ANA_C() {
+	 a &= c;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+}
+
+void I::ANA_D() {
+	 a &= d;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	 setFlag(P, PARITY(a));
+}
+
+void I::ANA_E() {
+	 a &= e;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ANA_H() {
+	 a &= h;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ANA_L() {
+	 a &= l;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ANA_M() {
+	 a &= read(HL());
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ANA_A() {
+	 a &= a;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::XRA_B() {
+	 a ^= b;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::XRA_C() {
+	 a ^= c;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::XRA_D() {
+	 a ^= c;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::XRA_E() {
+	 a ^= e;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::XRA_H() {
+	 a ^= h;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::XRA_L() {
+	 a ^= l;
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::XRA_M() {
+ 	a ^= read(HL());
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::XRA_A() {
+	a ^= a;
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+/* ================================= 0xB0 ---- 0xBf ================================ */
+
+void I::ORA_B() {
+ 	a |= b;
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ORA_C() {
+ 	a |= c;
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ORA_D() {
+ 	a |= d;
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ORA_E() {
+ 	a |= e;
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ORA_H() {
+ 	a |= h;
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ORA_L() {
+ 	a |= l;
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ORA_M() {
+ 	a |= read(HL());
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::ORA_A() {
+ 	a |= a;
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::CMP_B() {
+	uint16_t result = a - b;
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(result));
+}
+
+void I::CMP_C() {
+	uint16_t result = a - c;
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(result));
+}
+
+void I::CMP_D() {
+	uint16_t result = a - d;
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(result));
+}
+
+void I::CMP_E() {
+	uint16_t result = a - e;
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(result));
+}
+
+void I::CMP_H() {
+	uint16_t result = a - h;
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(result));
+}
+
+void I::CMP_L() {
+	uint16_t result = a - l;
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(result));
+}
+
+void I::CMP_M() {
+	uint16_t result = a - read(HL());
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(result));
+}
+
+void I::CMP_A() {
+	uint16_t result = a - a;
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(result));
+}
+
+/* ================================= 0xC0 ---- 0xCf ================================ */
+
+void I::RNZ() {
+	if(!getFlag(Z)) {
+		this->RET();
+	}
+}
+
+void I::POP_B() {
+	SET_BC(pop16());
+}
+
+void I::JNZ_ADR() {
+	if(getFlag(Z)) {
+		uint8_t lo = read(pc++);
+		uint8_t hi = read(pc++);
+		pc = (hi << 8) | lo;
+	}
+}
+
+void I::JMP_ADR() {
+	uint8_t lo = read(pc++);
+	uint8_t hi = read(pc++);
+	pc = (hi << 8) | lo;
+}
+
+void I::CNZ_ADR() {
+	if(getFlag(Z)) {
+		CALL();
+	}
+}
+
+void I::PUSH_B() {
+	push16(BC());
+}
+
+void I::ADI_D() {
+	uint8_t bytee = read(pc++);
+	uint32_t result = (uint16_t)a + (uint16_t)bytee;
+	a = a + bytee;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::RST_0() {
+	push16(pc);
+	pc = 0;
+}
+
+void I::RZ() {
+	if(getFlag(Z)) {
+		RET();
+	}
+}
+
+void I::RET() {
+	pc = pop16();
+}
+
+void I::JZ_ADR() {
+	if(getFlag(Z)) {
+		uint8_t lo = read(pc++);	
+		uint8_t hi = read(pc++);
+		pc = (hi << 8) | lo;
+	}
+}
+
+void I::CZ_ADR() {
+	if(getFlag(Z)) {
+		CALL();
+	}
+}
+
+void I::CALL() {
+	push16(pc);
+	uint8_t lo = read(pc++);
+	uint8_t hi = read(pc++);
+	pc = (hi << 8) | lo;
+}
+
+void I::ACI_D() {
+	uint8_t cy = getFlag(C);
+	uint32_t result = (uint16_t)a + (uint16_t)bytee;
+	a = a + bytee;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::RST_1() {
+	push16(pc);
+	pc = 0x0008;
+}
+
+void I::RNC() {
+	if(!getFlag(C)) {
+		RET();
+	}
+}
+
+void I::POP_D() {
+	SET_DE(pop16());
+}
+
+void I::JNC_ADR() {
+	if(!getFlag(C)) {
+		uint8_t lo = read(pc++);
+		uint8_t hi = read(pc++);
+		pc = (hi << 8) | lo;
+	}
+}
+
+void I::OUT_D() {
+	// TODO
+}
+
+void I::CNC_ADR() {
+	if(!getFlag(C)) {
+		CALL();
+	}
+}
+
+void I::PUSH_D() {
+	push16(DE());
+}

@@ -12,4 +12,4 @@ class MMU {
 		uint8_t *memory = nullptr;
 };
 
-#endif 
+#endif

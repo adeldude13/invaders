@@ -841,7 +841,7 @@ void I::SUB_A() {
 
 void I::SBB_B() {
 	uint8_t cyy = getFlag(C);
-	uint32_t result = (uint16_t)a - (uint16_t)b - c;
+	uint32_t result = (uint16_t)a - (uint16_t)b - cyy;
 	a = result & 0xff;
 	setFlag(Z, a == 0);
 	setFlag(S, a & 0x80);
@@ -1304,4 +1304,63 @@ void I::CNC_ADR() {
 
 void I::PUSH_D() {
 	push16(DE());
+}
+
+void I::SUI_D() {
+	uint32_t result = (uint16_t)a - (uint16_t)read(pc++);
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, 0);
+	setFlag(P, PARITY(a));
+}
+
+void I::RST_2() {
+	push16(pc);
+	pc = 0x0010;
+}
+
+void I::RC() {
+	if(getFlag(C)) {
+		RET();
+	}
+}
+
+void I::JC_ADR() {
+	if(getFlag(C)) {
+		uint8_t lo = read(pc++);
+		uint16_t hi = read(pc++) << 8;
+		pc = hi | lo;
+	}
+}
+
+void I::IN_D() {
+	// TODO
+}
+
+void I::CC_ADR() {
+	if(getFlag(C)) {
+		CALL();
+	}
+}
+
+void I::SBI_D() {
+	uint8_t cyy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)b - cyy;
+	a = result & 0xff;
+	setFlag(Z, a == 0);
+	setFlag(S, a & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(a));
+}
+
+void I::RST_3() {
+	RST_2();
+	pc = 0x0018;
+}
+
+void I::RPO() {
+	if(!getFlag(P)) {
+		pc = read(pc++) | (read(pc++) << 8);
+	}
 }

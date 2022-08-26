@@ -39,5 +39,7 @@ uint8_t I8080::pop8() {
 }
 
 uint16_t I8080::pop16() {
-	return (pop8(sp) << 8) | pop8(sp);
+	uint8_t lo = pop8();
+	uint8_t hi = pop8();
+	return (hi << 8) | lo;
 }

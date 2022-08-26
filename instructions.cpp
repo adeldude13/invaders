@@ -926,6 +926,7 @@ void I::ANA_B() {
 	 setFlag(Z, a==0);
 	 setFlag(S, a & 0x80);
 	 setFlag(C, false);
+	setFlag(P, PARITY(a));
 }
 
 void I::ANA_C() {
@@ -933,6 +934,7 @@ void I::ANA_C() {
 	 setFlag(Z, a==0);
 	 setFlag(S, a & 0x80);
 	 setFlag(C, false);
+	setFlag(P, PARITY(a));
 }
 
 void I::ANA_D() {
@@ -1194,6 +1196,8 @@ void I::JNZ_ADR() {
 		uint8_t lo = read(pc++);
 		uint8_t hi = read(pc++);
 		pc = (hi << 8) | lo;
+	} else {
+		pc+=2;
 	}
 }
 
@@ -1206,6 +1210,8 @@ void I::JMP_ADR() {
 void I::CNZ_ADR() {
 	if(getFlag(Z)) {
 		CALL();
+	} else {
+		pc+=2;
 	}
 }
 
@@ -1243,12 +1249,16 @@ void I::JZ_ADR() {
 		uint8_t lo = read(pc++);	
 		uint8_t hi = read(pc++);
 		pc = (hi << 8) | lo;
+	} else {
+		pc+=2;
 	}
 }
 
 void I::CZ_ADR() {
 	if(getFlag(Z)) {
 		CALL();
+	} else {
+		pc+=2;
 	}
 }
 
@@ -1289,6 +1299,8 @@ void I::JNC_ADR() {
 		uint8_t lo = read(pc++);
 		uint8_t hi = read(pc++);
 		pc = (hi << 8) | lo;
+	} else {
+		pc+=2;
 	}
 }
 
@@ -1299,6 +1311,8 @@ void I::OUT_D() {
 void I::CNC_ADR() {
 	if(!getFlag(C)) {
 		CALL();
+	} else {
+		pc+=2;	
 	}
 }
 
@@ -1331,6 +1345,8 @@ void I::JC_ADR() {
 		uint8_t lo = read(pc++);
 		uint16_t hi = read(pc++) << 8;
 		pc = hi | lo;
+	} else {
+		pc+=2;
 	}
 }
 
@@ -1341,6 +1357,8 @@ void I::IN_D() {
 void I::CC_ADR() {
 	if(getFlag(C)) {
 		CALL();
+	} else {
+		pc+=2;
 	}
 }
 
@@ -1363,4 +1381,153 @@ void I::RPO() {
 	if(!getFlag(P)) {
 		pc = read(pc++) | (read(pc++) << 8);
 	}
+}
+
+void I::POP_H() {
+	SET_HL(pop16());
+}
+
+void I::JPO_ADR() {
+	if(!getFlag(P)) {
+		JMP_ADR();
+	} else {
+		pc+=2;
+	}
+}
+
+void I::XTHL() {
+	uint16_t temp = HL();
+	SET_HL(pop16());
+	push16(temp);
+}
+
+void I::CPO_ADR() {
+	if(!getFlag(P)) {
+		CALL();
+	} else {
+		pc+=2;
+	}
+}
+
+void I::PUSH_H() {
+	push16(HL());
+}
+
+void I::ANI_D() {
+	 a &= read(pc++);
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	 setFlag(P, PARITY(P));
+}
+
+void I::RST_4() {
+	pc = 0x0020;
+}
+
+void I::RPE() {
+	if(getFlag(P)) {
+		RET();
+	}
+}
+
+void I::PCHL() {
+	pc = HL();
+}
+
+void I::JPE_ADR() {
+	if(getFlag(P)) {
+		JMP_ADR();
+	} else {
+		pc+=2;
+	}
+}
+
+void I::XCHG() {
+	uint16_t temp = DE();
+	SET_DE(HL());
+	SET_HL(temp);
+}
+
+void I::CPE_ADR() {
+	if(getFlag(P)) {
+		CALL();
+	} else {
+		pc+=2;
+	}
+}
+
+void I::XRI_D() {
+	 a ^= read(pc++);
+	 setFlag(Z, a==0);
+	 setFlag(S, a & 0x80);
+	 setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::RST_5() {
+	pc = 0x0028;
+}
+
+void I::RP() {
+	if(getFlag(P)) {
+		RET();
+	}
+}
+
+void I::RP() {
+	if(getFlag(P)) {
+		RET();
+	}
+}
+
+void I::POP_PSW() {
+	f = read(sp-2);
+	a = read(sp-1);
+	sp-=2;
+}
+
+void I::ORI_D() {
+ 	a |= read(pc++);
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
+	setFlag(P, PARITY(a));
+}
+
+void I::RST_6() {
+	pc = 0x0030;
+}
+
+void I::RM() {
+	pc+=2;	
+}
+
+void I::SPHL() {
+	pc = HL();
+}
+
+void I::JM_ADR() {
+	pc+=2;
+}
+
+void I::EI() {
+	// TODO
+}
+
+void I::CM_ADR() {
+	pc += 2;
+}
+
+void I::SBB_B() {
+	uint8_t cyy = getFlag(C);
+	uint32_t result = (uint16_t)a - (uint16_t)read(pc++) - cyy;
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0x80);
+	setFlag(C, result > 0xff);
+	setFlag(P, PARITY(result));
+}
+
+void I::RST_7() {
+	pc = 0x0038;
 }

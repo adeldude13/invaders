@@ -43,3 +43,39 @@ uint16_t I8080::pop16() {
 	uint8_t hi = pop8();
 	return (hi << 8) | lo;
 }
+
+uint8_t I8080::AF() {
+	return (a << 8) | f;
+}
+
+uint8_t I8080::BC() {
+	return (b << 8) | c;
+}
+
+uint8_t I8080::DE() {
+	return (d << 8) | e;
+}
+
+uint8_t I8080::HL() {
+	return (h << 8) | l;
+}
+
+void I8080::SET_AF(uint16_t b) {
+	a = b >> 8;
+	f = b & 0xff;
+}
+
+void I8080::SET_BC(uint16_t b) {
+	b = b >> 8;
+	c = b & 0xff;
+}
+
+void I8080::SET_DE(uint16_t b) {
+	d = b >> 8;
+	e = b & 0xff;
+}
+
+void I8080::SET_HL(uint16_t b) {
+	h = b >> 8;
+	l = b & 0xff;
+}

@@ -1,5 +1,5 @@
 CC := clang++
-cfiles := main.cpp i8080.cpp bus.cpp mmu.cpp
+cfiles := main.cpp i8080.cpp bus.cpp mmu.cpp instructions.cpp
 hfiles := i8080.hpp bus.hpp mmu.hpp
 files := $(cfiles) $(hfiles) Makefile
 out := main

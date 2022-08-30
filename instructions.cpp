@@ -13,6 +13,54 @@ bool PARITY(unsigned x) {
 	return true;
 }
 
+void I::execute(uint8_t ins) {
+	switch(ins) {
+		case 0x00: NOP(); break;
+		case 0x01: LXI_B(); break;
+		case 0x02: STAX_B(); break;
+		case 0x03: INX_B(); break;
+		case 0x04: INR_B(); break;
+		case 0x05: DCR_B(); break;
+		case 0x06: MVI_B_D(); break;
+		case 0x07: RLC(); break;
+		case 0x09: DAD_B(); break;
+		case 0x0A: LDAX_B(); break;
+		case 0x0B: DCX_B(); break;
+		case 0x0C: INR_C(); break;
+		case 0x0D: DCR_C(); break;
+		case 0x0E: MVI_C_D(); break;
+		case 0x0F: RRC(); break;
+		case 0x11: LXI_D(); break;
+		case 0x12: STAX_D(); break;
+		case 0x13: INX_D(); break;
+		case 0x14: INR_D(); break;
+		case 0x15: DCR_D(); break;
+		case 0x16: MVI_D_D(); break;
+		case 0x17: RAL(); break;
+		case 0x19: DAD_D(); break;
+		case 0x1A: LDAX_D(); break;
+		case 0x1B: DCX_D(); break;
+		case 0x1C: INR_E(); break;
+		case 0x1D: DCR_E(); break;
+		case 0x1E: MVI_E_D(); break;
+		case 0x1F: RAR(); break;
+		case 0x21: LXI_H_D(); break;
+		case 0x22: SHLD_ADR(); break;
+		case 0x23: INX_H(); break;
+		case 0x24: INR_H(); break;
+		case 0x25: DCR_H(); break;
+		case 0x26: MVI_H_D(); break;
+		case 0x27: DAA(); break;
+		case 0x29: DAD_H(); break;
+		case 0x2A: LHLD_ADR(); break;
+		case 0x2B: DCX_H(); break;
+		case 0x2C: INR_L(); break;
+		case 0x2D: DCR_L(); break;
+		case 0x2E: MVI_L_D(); break;
+		case 0x2F: CMA(); break;
+	}
+}
+
 /* ================================= 0x00 ---- 0x0f ================================ */
 void I::NOP() {
 	return;
@@ -1267,9 +1315,9 @@ void I::CZ_ADR() {
 }
 
 void I::CALL() {
-	push16(pc);
 	uint8_t lo = read(pc++);
 	uint8_t hi = read(pc++);
+	push16(pc);
 	pc = (hi << 8) | lo;
 }
 

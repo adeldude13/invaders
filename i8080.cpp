@@ -79,3 +79,10 @@ void I8080::SET_HL(uint16_t b) {
 	h = b >> 8;
 	l = b & 0xff;
 }
+
+void I8080::loop() {
+	while(true) {
+		uint8_t opcode = read(pc++);
+		this->execute(opcode);
+	}
+}

@@ -33,6 +33,7 @@ class I8080 {
 		uint8_t AF(), BC(), DE(), HL();
 		void SET_AF(uint16_t), SET_BC(uint16_t), SET_DE(uint16_t), SET_HL(uint16_t);
 
+		void loop(), execute(uint8_t); 
 		/* instruction */ 
 		void
 		NOP(), LXI_B(), STAX_B(), INX_B(), INR_B(), DCR_B(), MVI_B(), RLC(), DAD_B(), LDAX_B(),
@@ -62,9 +63,9 @@ class I8080 {
 		RST_6(), RM(), SPHL(), JM_ADR(), EI(), CM_ADR(), CPI_D(), RST_7();
 
 	private:
-		uint8_t a, b, c, d, e, h, l;
-		uint8_t f;
-		uint16_t pc, sp;
+		uint8_t a = 0, b = 0, c = 0, d = 0, e = 0, h = 0, l = 0;
+		uint8_t f = 0;
+		uint16_t pc = 0, sp;
 		Bus *bus;
 };
 

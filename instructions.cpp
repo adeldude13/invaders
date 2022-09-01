@@ -21,43 +21,278 @@ void I::execute(uint8_t ins) {
 		case 0x03: INX_B(); break;
 		case 0x04: INR_B(); break;
 		case 0x05: DCR_B(); break;
-		case 0x06: MVI_B_D(); break;
+		case 0x06: MVI_B(); break;
 		case 0x07: RLC(); break;
 		case 0x09: DAD_B(); break;
 		case 0x0A: LDAX_B(); break;
 		case 0x0B: DCX_B(); break;
 		case 0x0C: INR_C(); break;
 		case 0x0D: DCR_C(); break;
-		case 0x0E: MVI_C_D(); break;
+		case 0x0E: MVI_C(); break;
 		case 0x0F: RRC(); break;
+ 
+
 		case 0x11: LXI_D(); break;
 		case 0x12: STAX_D(); break;
 		case 0x13: INX_D(); break;
 		case 0x14: INR_D(); break;
 		case 0x15: DCR_D(); break;
-		case 0x16: MVI_D_D(); break;
+		case 0x16: MVI_D(); break;
 		case 0x17: RAL(); break;
 		case 0x19: DAD_D(); break;
 		case 0x1A: LDAX_D(); break;
 		case 0x1B: DCX_D(); break;
 		case 0x1C: INR_E(); break;
 		case 0x1D: DCR_E(); break;
-		case 0x1E: MVI_E_D(); break;
+		case 0x1E: MVI_E(); break;
 		case 0x1F: RAR(); break;
-		case 0x21: LXI_H_D(); break;
+	
+
+		case 0x21: LXI_H(); break;
 		case 0x22: SHLD_ADR(); break;
 		case 0x23: INX_H(); break;
 		case 0x24: INR_H(); break;
 		case 0x25: DCR_H(); break;
-		case 0x26: MVI_H_D(); break;
+		case 0x26: MVI_H(); break;
 		case 0x27: DAA(); break;
 		case 0x29: DAD_H(); break;
 		case 0x2A: LHLD_ADR(); break;
 		case 0x2B: DCX_H(); break;
 		case 0x2C: INR_L(); break;
 		case 0x2D: DCR_L(); break;
-		case 0x2E: MVI_L_D(); break;
+		case 0x2E: MVI_L(); break;
 		case 0x2F: CMA(); break;
+		
+
+		case 0x31: LXI_SP(); break;
+		case 0x32: STA_ADR(); break;
+		case 0x33: INX_SP(); break;
+		case 0x34: INR_M(); break;
+		case 0x35: DCR_M(); break;
+		case 0x36: MVI_M(); break;
+		case 0x37: STC(); break;
+		case 0x39: DAD_SP(); break;
+		case 0x3A: LDA_ADR(); break;
+		case 0x3B: DCX_SP(); break;
+		case 0x3C: INR_A(); break;
+		case 0x3D: DCR_A(); break;
+		case 0x3E: MVI_A(); break;
+		case 0x3F: CMC(); break;
+
+
+		case 0x40: MOV_B_B(); break;
+		case 0x41: MOV_B_C(); break;
+		case 0x42: MOV_B_D(); break;
+		case 0x43: MOV_B_E(); break;
+		case 0x44: MOV_B_H(); break;
+		case 0x45: MOV_B_L(); break;
+		case 0x46: MOV_B_M(); break;
+		case 0x47: MOV_B_A(); break;
+		case 0x48: MOV_C_B(); break;
+		case 0x49: MOV_C_C(); break;
+		case 0x4A: MOV_C_D(); break;
+		case 0x4B: MOV_C_E(); break;
+		case 0x4C: MOV_C_H(); break;
+		case 0x4D: MOV_C_L(); break;
+		case 0x4E: MOV_C_M(); break;
+		case 0x4F: MOV_C_A(); break;
+
+		case 0x50: MOV_D_B(); break;
+		case 0x51: MOV_D_C(); break;
+		case 0x52: MOV_D_D(); break;
+		case 0x53: MOV_D_E(); break;
+		case 0x54: MOV_D_H(); break;
+		case 0x55: MOV_D_L(); break;
+		case 0x56: MOV_D_M(); break;
+		case 0x57: MOV_D_A(); break;
+		case 0x58: MOV_E_B(); break;
+		case 0x59: MOV_E_C(); break;
+		case 0x5A: MOV_E_D(); break;
+		case 0x5B: MOV_E_E(); break;
+		case 0x5C: MOV_E_H(); break;
+		case 0x5D: MOV_E_L(); break;
+		case 0x5E: MOV_E_M(); break;
+		case 0x5F: MOV_E_A(); break;
+
+
+		case 0x60: MOV_H_B(); break;
+		case 0x61: MOV_H_C(); break;
+		case 0x62: MOV_H_D(); break;
+		case 0x63: MOV_H_E(); break;
+		case 0x64: MOV_H_H(); break;
+		case 0x65: MOV_H_L(); break;
+		case 0x66: MOV_H_M(); break;
+		case 0x67: MOV_H_A(); break;
+		case 0x68: MOV_L_B(); break;
+		case 0x69: MOV_L_C(); break;
+		case 0x6A: MOV_L_D(); break;
+		case 0x6B: MOV_L_E(); break;
+		case 0x6C: MOV_L_H(); break;
+		case 0x6D: MOV_L_L(); break;
+		case 0x6E: MOV_L_M(); break;
+		case 0x6F: MOV_L_A(); break;
+
+
+		case 0x70: MOV_M_B(); break;
+		case 0x71: MOV_M_C(); break;
+		case 0x72: MOV_M_D(); break;
+		case 0x73: MOV_M_E(); break;
+		case 0x74: MOV_M_H(); break;
+		case 0x75: MOV_M_L(); break;
+		case 0x76: HLT(); 		break;
+		case 0x77: MOV_M_A(); break;
+		case 0x78: MOV_A_B(); break;
+		case 0x79: MOV_A_C(); break;
+		case 0x7A: MOV_A_D(); break;
+		case 0x7B: MOV_A_E(); break;
+		case 0x7C: MOV_A_H(); break;
+		case 0x7D: MOV_A_L(); break;
+		case 0x7E: MOV_A_M(); break;
+		case 0x7F: MOV_A_A(); break;
+
+
+		case 0x80: ADD_B(); break;
+		case 0x81: ADD_C(); break;
+		case 0x82: ADD_D(); break;
+		case 0x83: ADD_E(); break;
+		case 0x84: ADD_H(); break;
+		case 0x85: ADD_L(); break;
+		case 0x86: ADD_M(); break;
+		case 0x87: ADD_A(); break;
+		case 0x88: ADC_B(); break;
+		case 0x89: ADC_C(); break;
+		case 0x8A: ADC_D(); break;
+		case 0x8B: ADC_E(); break;
+		case 0x8C: ADC_H(); break;
+		case 0x8D: ADC_L(); break;
+		case 0x8E: ADC_M(); break;
+		case 0x8F: ADC_A(); break;
+
+		
+		case 0x90: SUB_B(); break;
+		case 0x91: SUB_C(); break;
+		case 0x92: SUB_D(); break;
+		case 0x93: SUB_E(); break;
+		case 0x94: SUB_H(); break;
+		case 0x95: SUB_L(); break;
+		case 0x96: SUB_M(); break;
+		case 0x97: SUB_A(); break;
+		case 0x98: SBB_B(); break;
+		case 0x99: SBB_C(); break;
+		case 0x9A: SBB_D(); break;
+		case 0x9B: SBB_E(); break;
+		case 0x9C: SBB_H(); break;
+		case 0x9D: SBB_L(); break;
+		case 0x9E: SBB_M(); break;
+		case 0x9F: SBB_A(); break;
+
+		
+		case 0xA0: ANA_B(); break;
+		case 0xA1: ANA_C(); break;
+		case 0xA2: ANA_D(); break;
+		case 0xA3: ANA_E(); break;
+		case 0xA4: ANA_H(); break;
+		case 0xA5: ANA_L(); break;
+		case 0xA6: ANA_M(); break;
+		case 0xA7: ANA_A(); break;
+		case 0xA8: XRA_B(); break;
+		case 0xA9: XRA_C(); break;
+		case 0xAA: XRA_D(); break;
+		case 0xAB: XRA_E(); break;
+		case 0xAC: XRA_H(); break;
+		case 0xAD: XRA_L(); break;
+		case 0xAE: XRA_M(); break;
+		case 0xAF: XRA_A(); break;
+
+
+		case 0xB0: ORA_B(); break;
+		case 0xB1: ORA_C(); break;
+		case 0xB2: ORA_D(); break;
+		case 0xB3: ORA_E(); break;
+		case 0xB4: ORA_H(); break;
+		case 0xB5: ORA_L(); break;
+		case 0xB6: ORA_M(); break;
+		case 0xB7: ORA_A(); break;
+		case 0xB8: CMP_B(); break;
+		case 0xB9: CMP_C(); break;
+		case 0xBA: CMP_D(); break;
+		case 0xBB: CMP_E(); break;
+		case 0xBC: CMP_H(); break;
+		case 0xBD: CMP_L(); break;
+		case 0xBE: CMP_M(); break;
+		case 0xBF: CMP_A(); break;
+
+
+		case 0xC0: RNZ(); break;
+		case 0xC1: POP_B(); break;
+		case 0xC2: JNZ_ADR(); break;
+		case 0xC3: JMP_ADR(); break;
+		case 0xC4: CNZ_ADR(); break;
+		case 0xC5: PUSH_B(); break;
+		case 0xC6: ADI_D(); break;
+		case 0xC7: RST_0(); break;
+		case 0xC8: RZ(); break;
+		case 0xC9: RET(); break;
+		case 0xCA: JZ_ADR(); break;
+		case 0xCB: NOP(); break;
+		case 0xCC: CZ_ADR(); break;
+		case 0xCD: CALL(); break;
+		case 0xCE: ACI_D(); break;
+		case 0xCF: RST_1(); break;
+
+
+		case 0xD0: RNC(); break;
+		case 0xD1: POP_D(); break;
+		case 0xD2: JNC_ADR(); break;
+		case 0xD3: OUT_D(); break;
+		case 0xD4: CNC_ADR(); break;
+		case 0xD5: PUSH_D(); break;
+		case 0xD6: SUI_D(); break;
+		case 0xD7: RST_2(); break;
+		case 0xD8: RC(); break;
+		case 0xD9: NOP(); break;
+		case 0xDA: JC_ADR(); break;
+		case 0xDB: IN_D(); break;
+		case 0xDC: CC_ADR(); break;
+		case 0xDD: NOP(); break;
+		case 0xDE: SBI_D(); break;
+		case 0xDF: RST_3(); break;
+
+
+		case 0xE0: RPO(); break;
+		case 0xE1: POP_H(); break;
+		case 0xE2: JPO_ADR(); break;
+		case 0xE3: XTHL(); break;
+		case 0xE4: CPO_ADR(); break;
+		case 0xE5: PUSH_H(); break;
+		case 0xE6: ANI_D(); break;
+		case 0xE7: RST_4(); break;
+		case 0xE8: RPE(); break;
+		case 0xE9: PCHL(); break;
+		case 0xEA: JPE_ADR(); break;
+		case 0xEB: XCHG(); break;
+		case 0xEC: CPE_ADR(); break;
+		case 0xED: NOP(); break;
+		case 0xEE: XRI_D(); break;
+		case 0xEF: RST_5(); break;
+
+
+		case 0xF0: RP(); break;
+		case 0xF1: POP_PSW(); break;
+		case 0xF2: JP_ADR(); break;
+		case 0xF3: DI(); break;
+		case 0xF4: CP_ADR(); break;
+		case 0xF5: PUSH_PSW(); break;
+		case 0xF6: ORI_D(); break;
+		case 0xF7: RST_6(); break;
+		case 0xF8: RM(); break;
+		case 0xF9: SPHL(); break;
+		case 0xFA: JM_ADR(); break;
+		case 0xFB: EI(); break;
+		case 0xFC: CM_ADR(); break;
+		case 0xFD: NOP(); break;
+		case 0xFE: CPI_D(); break;
+		case 0xFF: RST_7(); break;
 	}
 }
 
@@ -1536,6 +1771,17 @@ void I::POP_PSW() {
 	sp-=2;
 }
 
+void I::JP_ADR() {
+	if(getFlag(P)) {
+		uint8_t lo = read(pc++);
+		uint8_t hi = read(pc++);
+		pc = (hi << 8) | lo;
+	} else {
+		pc++;
+		pc++;
+	}
+}
+
 void I::ORI_D() {
  	a |= read(pc++);
 	setFlag(Z, a==0);
@@ -1578,4 +1824,22 @@ void I::CPI_D() {
 
 void I::RST_7() {
 	pc = 0x0038;
+}
+
+void I::DI() {
+	// TODO
+}
+
+void I::CP_ADR() {
+	if(getFlag(P)) {
+		uint8_t lo = read(pc++);
+		uint8_t hi = read(pc++);
+		pc = (hi << 8) | lo;
+	} else {
+		pc += 2;
+	}
+}
+
+void I::PUSH_PSW() {
+	// TODO
 }

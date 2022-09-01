@@ -60,7 +60,7 @@ class I8080 {
 		RST_1(), RNC(), POP_D(), JNC_ADR(), OUT_D(), CNC_ADR(), PUSH_D(), SUI_D(), RST_2(), RC(), JC_ADR(),
 		IN_D(), CC_ADR(), SBI_D(), RST_3(), RPO(), POP_H(), JPO_ADR(), XTHL(), CPO_ADR(), PUSH_H(), ANI_D(),
 		RST_4(), RPE(), PCHL(), JPE_ADR(), XCHG(), CPE_ADR(), XRI_D(), RST_5(), RP(), POP_PSW(), ORI_D(),
-		RST_6(), RM(), SPHL(), JM_ADR(), EI(), CM_ADR(), CPI_D(), RST_7();
+		RST_6(), RM(), SPHL(), JM_ADR(), EI(), CM_ADR(), CPI_D(), RST_7(), JP_ADR(), DI(), CP_ADR(), PUSH_PSW();
 
 	private:
 		uint8_t a = 0, b = 0, c = 0, d = 0, e = 0, h = 0, l = 0;

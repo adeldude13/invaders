@@ -5,7 +5,7 @@
 
 class MMU {
 	public:
-		MMU(uint8_t *);
+		MMU(uint8_t *, uint16_t, uint16_t);
 		uint8_t read(uint16_t);
 		void write(uint16_t, uint8_t);
 	private:

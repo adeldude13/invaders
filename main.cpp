@@ -24,7 +24,8 @@ int main(int argc, char **argv) {
 		return 1;
 	}
 	uint8_t *code = readfile(argv[1]);
-	Bus bus(code); // todo run emulator method
+	Bus bus(code, 0x1FFF, 0xFFFFu);
+	bus.run();
 	free(code);
 	return 0;
 }

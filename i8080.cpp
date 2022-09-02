@@ -30,8 +30,8 @@ void I8080::push8(uint8_t v) {
 }
 
 void I8080::push16(uint16_t v) {
-	push8(v & 0xff);
 	push8(v >> 8);
+	push8(v & 0xff);
 }
 
 uint8_t I8080::pop8() {
@@ -44,19 +44,19 @@ uint16_t I8080::pop16() {
 	return (hi << 8) | lo;
 }
 
-uint8_t I8080::AF() {
+uint16_t I8080::AF() {
 	return (a << 8) | f;
 }
 
-uint8_t I8080::BC() {
+uint16_t I8080::BC() {
 	return (b << 8) | c;
 }
 
-uint8_t I8080::DE() {
+uint16_t I8080::DE() {
 	return (d << 8) | e;
 }
 
-uint8_t I8080::HL() {
+uint16_t I8080::HL() {
 	return (h << 8) | l;
 }
 
@@ -80,9 +80,11 @@ void I8080::SET_HL(uint16_t b) {
 	l = b & 0xff;
 }
 
-void I8080::loop() {
-	while(true) {
+void I8080::loop(int n) {
+	int count = 0;
+	while(count < n || n == 0) {
 		uint8_t opcode = read(pc++);
 		this->execute(opcode);
+		count++;
 	}
 }

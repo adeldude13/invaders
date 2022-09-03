@@ -60,24 +60,24 @@ uint16_t I8080::HL() {
 	return (h << 8) | l;
 }
 
-void I8080::SET_AF(uint16_t b) {
-	a = b >> 8;
-	f = b & 0xff;
+void I8080::SET_AF(uint16_t val) {
+	a =  val >> 8;
+	f =  val & 0xff;
 }
 
-void I8080::SET_BC(uint16_t b) {
-	b = b >> 8;
-	c = b & 0xff;
+void I8080::SET_BC(uint16_t val) {
+	b = val >> 8;
+	c = val & 0xff;
 }
 
-void I8080::SET_DE(uint16_t b) {
-	d = b >> 8;
-	e = b & 0xff;
+void I8080::SET_DE(uint16_t val) {
+	d = val >> 8;
+	e = val & 0xff;
 }
 
-void I8080::SET_HL(uint16_t b) {
-	h = b >> 8;
-	l = b & 0xff;
+void I8080::SET_HL(uint16_t val) {
+	h = val >> 8;
+	l = val & 0xff;
 }
 
 void I8080::loop(int n) {

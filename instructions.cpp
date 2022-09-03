@@ -519,7 +519,9 @@ void I::DAA() {
 }
 
 void I::DAD_H() {
-	// TODO	
+	uint32_t result = HL() + HL();
+	SET_HL(result & 0xFFFF);
+	setFlag(C, result > 0xFFFF);
 }
 
 void I::LHLD_ADR() {
@@ -606,7 +608,7 @@ void I::STC() {
 void I::DAD_SP() {
 	uint64_t res = HL() + sp;
 	SET_HL(HL() + sp);
-	setFlag(C, res > 0xFFFF);
+	setFlag(C, res > 255);
 }
 
 void I::LDA_ADR() {
@@ -1606,7 +1608,7 @@ void I::JNC_ADR() {
 }
 
 void I::OUT_D() {
-	// TODO
+	pc++;
 }
 
 void I::CNC_ADR() {

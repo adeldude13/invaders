@@ -57,7 +57,7 @@ uint16_t I8080::DE() {
 }
 
 uint16_t I8080::HL() {
-	return (h << 8) | l;
+	return (uint16_t)(h << 8) | (uint16_t)l;
 }
 
 void I8080::SET_AF(uint16_t val) {
@@ -76,7 +76,7 @@ void I8080::SET_DE(uint16_t val) {
 }
 
 void I8080::SET_HL(uint16_t val) {
-	h = val >> 8;
+	h = (val >> 8);
 	l = val & 0xff;
 }
 

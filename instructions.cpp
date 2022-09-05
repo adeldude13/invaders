@@ -327,7 +327,6 @@ void I::INR_B() {
 void I::DCR_B() {
 	uint16_t res = b - 1;
 	b = b - 1;
-	setFlag(A, !((res&0xF) == 0xF));
 	setFlag(Z, (res&0xff) == 0);
 	setFlag(S, (res & 0x80) != 0);
 	setFlag(P, PARITY(res&0xff));
@@ -367,8 +366,8 @@ void I::INR_C() {
 }
 
 void I::DCR_C() {
-	c = c - 1;
 	uint16_t res = c - 1;
+	c = c - 1;
 	setFlag(Z, res == 0);
 	setFlag(S, (res & 0x80) != 0);
 	setFlag(P, PARITY(res&0xff));
@@ -491,7 +490,8 @@ void I::SHLD_ADR() {
 }
 
 void I::INX_H() {
-	SET_HL(HL()+1);
+	uint16_t v = HL() + (uint16_t)1;
+	SET_HL(v);
 }
 
 void I::INR_H() {
@@ -1830,10 +1830,11 @@ void I::CM_ADR() {
 }
 
 void I::CPI_D() {
-	uint16_t result = a - read(pc++);
+	uint8_t data = read(pc++);
+	uint16_t result = (uint16_t)a - (uint16_t)data;
 	setFlag(Z, result == 0);
-	setFlag(S, result & 0x80);
-	setFlag(C, result > 0xff);
+	setFlag(S, (result & 0x80) == 0x80);
+	setFlag(C, a < data);
 	setFlag(P, PARITY(result&0xff));
 }
 

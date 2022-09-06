@@ -14,6 +14,10 @@ bool PARITY(uint8_t val) {
 }
 
 void I::execute(uint8_t ins) {
+	if(ins == 0xD1) {
+		POP_D();
+		return;
+	}
 	switch(ins) {
 		case 0x00: NOP(); break;
 		case 0x01: LXI_B(); break;
@@ -344,9 +348,9 @@ void I::RLC() {
 }
 
 void I::DAD_B() {
-	uint16_t res = HL() + BC();
-	setFlag(C, res > 255);
-	SET_HL(res);
+	uint32_t res = HL() + BC();
+	setFlag(C, res > 0xFFFF);
+	SET_HL(res & 0xFFFF);
 }
 
 void I::LDAX_B() {
@@ -368,7 +372,7 @@ void I::INR_C() {
 void I::DCR_C() {
 	uint16_t res = c - 1;
 	c = c - 1;
-	setFlag(Z, res == 0);
+	setFlag(Z, (res & 0xFF) == 0);
 	setFlag(S, (res & 0x80) != 0);
 	setFlag(P, PARITY(res&0xff));
 }
@@ -380,7 +384,7 @@ void I::MVI_C() {
 void I::RRC() {
 	uint8_t prevBit = a & 0x01;
 	a >>= 1;
-	a |= prevBit << 7;
+	a |= (prevBit << 7);
 	setFlag(C, prevBit == 1);
 }
 
@@ -432,7 +436,7 @@ void I::RAL() {
 
 
 void I::DAD_D() {
-	uint16_t res = HL() + DE();
+	uint32_t res = HL() + DE();
 	setFlag(C, res > 255);
 	SET_HL(res);
 }
@@ -574,7 +578,7 @@ void I::STA_ADR() {
 	uint8_t lo = read(pc++);
 	uint8_t hi = read(pc++);
 	uint8_t addr = (hi << 8) | lo;
-	a = read(addr);
+	write(addr, a);
 }
 
 void I::INX_SP() {
@@ -614,7 +618,8 @@ void I::DAD_SP() {
 void I::LDA_ADR() {
 	uint8_t lo = read(pc++);
 	uint8_t hi = read(pc++);
-	a = read((hi << 8) | lo);
+	uint16_t adr = (hi << 8) | lo;
+	a = read(adr);
 }
 
 void I::DCX_SP() {
@@ -1284,7 +1289,7 @@ void I::ANA_A() {
 	 setFlag(Z, a==0);
 	 setFlag(S, a & 0x80);
 	 setFlag(C, false);
-	setFlag(P, PARITY(a));
+	 setFlag(P, PARITY(a));
 }
 
 void I::XRA_B() {
@@ -1345,9 +1350,9 @@ void I::XRA_M() {
 
 void I::XRA_A() {
 	a ^= a;
+	setFlag(C, false);
 	setFlag(Z, a==0);
 	setFlag(S, a & 0x80);
-	setFlag(C, false);
 	setFlag(P, PARITY(a));
 }
 
@@ -1524,7 +1529,7 @@ void I::PUSH_B() {
 void I::ADI_D() {
 	uint8_t bytee = read(pc++);
 	uint16_t result = (uint16_t)a + (uint16_t)bytee;
-	a = a + bytee;
+	a = result & 0xff;
 	setFlag(Z, a == 0);
 	setFlag(S, a & 0x80);
 	setFlag(C, result > 0xff);
@@ -1781,9 +1786,7 @@ void I::RP() {
 }
 
 void I::POP_PSW() {
-	f = read(sp-2);
-	a = read(sp-1);
-	sp-=2;
+	SET_AF(pop16());
 }
 
 void I::JP_ADR() {
@@ -1818,7 +1821,14 @@ void I::SPHL() {
 }
 
 void I::JM_ADR() {
-	pc+=2;
+	if(getFlag(S)) {
+		uint8_t lo = read(pc++);
+		uint8_t hi = read(pc++);
+		pc = hi << 8;
+		pc |= lo;
+	} else {
+		pc+=2;
+	}
 }
 
 void I::EI() {
@@ -1857,5 +1867,5 @@ void I::CP_ADR() {
 }
 
 void I::PUSH_PSW() {
-	// TODO
+	push16(AF());
 }

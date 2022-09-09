@@ -1,6 +1,4 @@
 #include "i8080.hpp"
-#include <stdio.h>
-#include <stdlib.h>
 
 #define I I8080
 
@@ -1613,7 +1611,7 @@ void I::JNC_ADR() {
 }
 
 void I::OUT_D() {
-	pc++;
+	bus->out(read(pc++), a);
 }
 
 void I::CNC_ADR() {
@@ -1659,7 +1657,7 @@ void I::JC_ADR() {
 }
 
 void I::IN_D() {
-	// TODO
+	a = bus->in(read(pc++));
 }
 
 void I::CC_ADR() {
@@ -1832,7 +1830,7 @@ void I::JM_ADR() {
 }
 
 void I::EI() {
-	// TODO
+	INT = true;
 }
 
 void I::CM_ADR() {

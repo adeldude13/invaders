@@ -34,6 +34,8 @@ class I8080 {
 		void SET_AF(uint16_t), SET_BC(uint16_t), SET_DE(uint16_t), SET_HL(uint16_t);
 
 		void loop(int n=0), execute(uint8_t); 
+		bool INT = false;
+		void interrupt(int);
 		/* instruction */ 
 		void
 		NOP(), LXI_B(), STAX_B(), INX_B(), INR_B(), DCR_B(), MVI_B(), RLC(), DAD_B(), LDAX_B(),

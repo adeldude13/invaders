@@ -1,8 +1,8 @@
 #include "mmu.hpp" 
+#include <iostream>
 
-MMU::MMU(uint8_t *data, uint16_t data_size, uint16_t size) {
-	memory = new uint8_t[size];
-	for(uint16_t i=0;i<size;i++) {
+MMU::MMU(uint8_t *data, uint16_t data_size) {
+	for(uint32_t i=0;i<0x10000;i++) {
 		memory[i] = 0;
 	}
 	for(uint16_t i=0;i<data_size;i++) {

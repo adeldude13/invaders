@@ -1,6 +1,6 @@
 CC := clang++
-CFILES := main.cpp i8080.cpp bus.cpp mmu.cpp instructions.cpp graphics.cpp
-HFILES := i8080.hpp bus.hpp mmu.hpp graphics.hpp
+CFILES := main.cpp i8080.cpp bus.cpp instructions.cpp graphics.cpp
+HFILES := i8080.hpp bus.hpp graphics.hpp
 FILES := $(CFILES) $(HFILES) Makefile
 OUT := main
 LIBS := `pkg-config --cflags --libs sdl2`

@@ -99,16 +99,26 @@ void I8080::SET_HL(uint16_t val) {
 	l = val & 0xff;
 }
 
-void I8080::loop(int n) {
+int I8080::run(uint64_t n) {
+	cycles = 0;
 	int count = 0;
-	while(count < n || n == 0) {
+	while(cycles < n) {
+		if(pc > 0x3fff) {
+			running = false;
+			return 0;
+		}
 		uint8_t opcode = read(pc++);
 		this->execute(opcode);
-		count += OPCODES_CYCLES[opcode];
+		cycles += (uint64_t)OPCODES_CYCLES[opcode];
+		count++;
 	}
+	return 0;
 }
 
 void I8080::interrupt(int n) {
-	this->push16(pc);
-	pc = n;
+	if(INT) {
+		push16(pc);
+		INT = false;
+		pc = n;
+	}
 }

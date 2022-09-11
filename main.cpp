@@ -2,6 +2,7 @@
 #include <inttypes.h>
 #include <stdlib.h>
 #include "bus.hpp"
+#include <SDL2/SDL.h>
 
 #define WIN_WIDTH 1000
 #define WIN_HEIGHT 600
@@ -23,12 +24,11 @@ uint8_t *readfile(char *filename) {
 
 int main(int argc, char **argv) {
 	if(argc != 2) {
-		std::cout << argv[0] << " {invaders rom}";
+		std::cout << argv[0] << " {Space Invaders ROM File}";
 		return 1;
 	}
 	uint8_t *code = readfile(argv[1]);
-	Bus bus("test", WIN_WIDTH, WIN_HEIGHT, code, 0x1FFF);
+	Bus bus = Bus((char*)"test", WIN_WIDTH, WIN_HEIGHT, code, 0x1FFF);
 	bus.run();
-	free(code);
 	return 0;
 }

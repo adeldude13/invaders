@@ -20,7 +20,7 @@ class Bus;
 class I8080 {
 	public:
 		I8080(Bus *);
-
+		bool running = true;
 		void setFlag(Flags, bool); 
 		uint8_t getFlag(Flags);
 
@@ -33,9 +33,12 @@ class I8080 {
 		uint16_t AF(), BC(), DE(), HL();
 		void SET_AF(uint16_t), SET_BC(uint16_t), SET_DE(uint16_t), SET_HL(uint16_t);
 
-		void loop(int n=0), execute(uint8_t); 
-		bool INT = false;
+		int run(uint64_t); 
+		void execute(uint8_t); 
+		bool INT = false, halted = false;
 		void interrupt(int);
+		uint64_t cycles = 0;
+
 		/* instruction */ 
 		void
 		NOP(), LXI_B(), STAX_B(), INX_B(), INR_B(), DCR_B(), MVI_B(), RLC(), DAD_B(), LDAX_B(),

@@ -3,10 +3,8 @@
 #include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <stdlib.h>
+#include <iostream>
 
-#define TIC (1000.0 / 60.0)
-#define CYCLES_PER_MS 2000
-#define CYCLES_PER_TIC (TIC * CYCLES_PER_MS)
 
 Bus::Bus(char *name, int width, int height, uint8_t *code, uint16_t a) {
 	ports[0] = 0;
@@ -15,115 +13,70 @@ Bus::Bus(char *name, int width, int height, uint8_t *code, uint16_t a) {
 	shift1 = 0;
 	shift0 = 0;
 	graphics = new Graphics(name, width, height, 224, 256);
-	mmu = new MMU(code, a);
 	cpu = new I8080(this); // pass this bus to the cpu
-	graphics->setMMU(mmu);
+	int i;
+	for(i=0; i<a;i++) {
+		memory[i] = code[i];
+	}
+	for(i=a;i<0x10000;i++) {
+		memory[i] = 0x0;
+	}
 }
 
 uint8_t Bus::read(uint16_t addr) {
-	return mmu->read(addr);
+	if(addr >= 0x6000) {
+		return 0;
+	}
+	if(addr >= 0x4000 && addr < 0x6000) {
+		addr -= 0x2000;
+	}
+	return memory[addr];
 }
 
 void Bus::write(uint16_t addr, uint8_t b) {
-	return mmu->write(addr, b);
-}
-
-void Bus::run() {
-	uint32_t last_tic = SDL_GetTicks();	
-	while(1) {
-		if((SDL_GetTicks() - last_tic) >= TIC) {
-			last_tic = SDL_GetTicks();
-			cpu->loop(CYCLES_PER_TIC/2);
-			if(cpu->INT) {
-				cpu->interrupt(0x08);
-			}
-			cpu->loop(CYCLES_PER_TIC/2);
-			this->input();
-			graphics->draw();
-			if(cpu->INT) {
-				cpu->interrupt(0x10);
-			}
-		}
+	if(addr >= 0x2000 && addr < 0x4000) {
+		memory[addr] = b;
 	}
 }
 
 void Bus::input() {
 	SDL_Event event;
 	while(SDL_PollEvent(&event)) {
-		switch(event.type) {
-			case SDL_KEYDOWN:
-				switch(event.key.keysym.sym) {
-					case 'c':
-						ports[0] |= 1;
-						break;
-					case 's':
-						ports[0] |= 1 << 2;
-						break;
-					case 'w':
-						ports[0] |= 1 << 4;
-						break;
-					case 'a':
-						ports[0] |= 1 << 5;
-						break;
-					case 'd':
-						ports[0] |= 1 << 6;
-						break;
-					case SDLK_LEFT:
-						ports[1] |= 1 << 5;
-						break;
-					case SDLK_RIGHT:
-						ports[1] |= 1 << 6;
-						break;
-					case SDLK_RETURN:
-						ports[1] |= 1 << 1;
-						break;
-					case SDLK_UP:
-						ports[1] |= 1 << 4;
-						break;
-				}
-				break;
-			case SDL_KEYUP:
-				switch(event.key.keysym.sym) {
-						case 'c':
-						ports[0] &= ~1;
-						break;
-					case 's':
-						ports[0] &= ~(1 << 2);
-						break;
-					case 'w':
-						ports[0] &= ~(1 << 4);
-						break;
-					case 'a':
-						ports[0] &= ~(1 << 5);
-						break;
-					case 'd':
-						ports[0] &= ~(1 << 6);
-						break;
-					case SDLK_LEFT:
-						ports[1] &= ~(1 << 5);
-						break;
-					case SDLK_RIGHT:
-						ports[1] &= ~(1 << 6);
-						break;
-					case SDLK_RETURN:
-						ports[1] &= ~(1 << 1);
-						break;
-					case SDLK_UP:
-						ports[1] &= ~(1 << 4);
-						break;
-				}
-			break;
-			case SDL_QUIT:
-				exit(0);
-				break;
+		if(event.type == SDL_QUIT) {
+			std::cout << "Bye (:" << std::endl;
+			exit(0);
+		}
+		if(event.type == SDL_KEYDOWN) {
+			switch(event.key.keysym.sym) {
+				case SDLK_c: ports[0] |= 0x01; break;
+				case SDLK_RETURN: ports[0] |= 0x04; break;
+				case SDLK_SPACE: ports[0] |= 0x10; break;
+				case SDLK_a: ports[0] |= 0x20; break;
+				case SDLK_d: ports[0] |= 0x40; break;
+			}
+		}
+		if(event.type == SDL_KEYUP) {
+			switch(event.key.keysym.sym) {
+				case SDLK_c: ports[0] &= ~0x01; break;
+				case SDLK_RETURN: ports[0] &= ~0x04; break;
+				case SDLK_SPACE: ports[0] &= ~0x10; break;
+				case SDLK_a: ports[0] &= ~0x20; break;
+				case SDLK_d: ports[0] &= ~0x40; break;
+			}
 		}
 	}
 }
 
+void Bus::run() {
+	std::cout << "Starting Loop" << std::endl;
+}
+
 
 uint8_t Bus::in(int n) {
-	uint8_t value;
+	uint8_t value = 0xFF;
 	switch(n) {
+		case 0:
+			break;
 		case 1:
 		case 2:
 			value = ports[n-1];
@@ -132,6 +85,7 @@ uint8_t Bus::in(int n) {
 			uint16_t v = (shift1<<8) | shift0;
 			value = ((v >> (8-shift_offset)) & 0xff);
 						}
+		break;
 	}
 	return value;
 }

@@ -13,7 +13,9 @@ Graphics::Graphics(char *title, int ww, int wh, int vw, int vh) {
 	if(SDL_Init(SDL_INIT_VIDEO) != 0) {
 		REPORT("SDL Failed To Init");
 	}
-	window = SDL_CreateWindow(title, 0, 0, ww, wh, SDL_WINDOW_SHOWN);
+	ww=1;
+	wh=1;
+	window = SDL_CreateWindow(title, 0, 0, wh, ww, SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
 	if(window == NULL) {
 		REPORT("Failed to Create A Window");
 	}
@@ -25,8 +27,8 @@ Graphics::Graphics(char *title, int ww, int wh, int vw, int vh) {
 	if(texture == NULL) {
 		REPORT("Failed to Create Texture");
 	}
-	SDL_RenderSetLogicalSize(renderer, WIDTH, HEIGHT);
-	SDL_SetHint(SDL_HINT_RENDER_VSYNC, "1");
+	SDL_RenderSetLogicalSize(renderer, vw, vh);
+
 }
 #undef REPORT
 
@@ -38,7 +40,7 @@ void Graphics::draw(uint8_t *code) {
 		for(uint8_t shift=0; shift<8;shift++) {
 			int px = x + shift;
 			int py = y;
-			bool isOn = (curbyte << shift) & 0x1;
+			bool isOn = (curbyte >> shift) & 0x1;
 			uint8_t v = isOn ? 255 : 0;
 			int temp_x = px;
 			px = py;
@@ -61,4 +63,10 @@ void Graphics::render() {
 	}
 	memcpy(pixels, buf, pitch * HEIGHT);
 	SDL_UnlockTexture(texture);
+}
+
+void Graphics::update() {
+	SDL_RenderClear(renderer);
+	SDL_RenderCopy(renderer, texture, NULL, NULL);
+	SDL_RenderPresent(renderer);
 }

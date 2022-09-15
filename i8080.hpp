@@ -23,7 +23,7 @@ class I8080 {
 		bool running = true;
 		void setFlag(Flags, bool); 
 		uint8_t getFlag(Flags);
-
+		int ran = 0;
 		uint8_t read(uint16_t addr); 
 		void write(uint16_t addr, uint8_t e);
 		void push8(uint8_t), push16(uint16_t);
@@ -33,11 +33,12 @@ class I8080 {
 		uint16_t AF(), BC(), DE(), HL();
 		void SET_AF(uint16_t), SET_BC(uint16_t), SET_DE(uint16_t), SET_HL(uint16_t);
 
-		int run(uint64_t); 
+		int step(); 
 		void execute(uint8_t); 
-		bool INT = false, halted = false;
-		void interrupt(int);
+		void interrupt(uint8_t);
 		uint64_t cycles = 0;
+		bool INT = false, halted = false;
+		void dump();	
 
 		/* instruction */ 
 		void

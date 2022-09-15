@@ -1,22 +1,19 @@
 #include "i8080.hpp"
 #include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
 
 #define I I8080
 
 bool PARITY(uint8_t val) {
-  uint8_t nb_one_bits = 0;
-  for (int i = 0; i < 8; i++) {
-    nb_one_bits += ((val >> i) & 1);
-  }
-
-  return (nb_one_bits & 1) == 0;
+	int count = 0;
+	for(uint8_t i=0; i<8;i++) {
+		count += (val >> i) & 0x1;
+	}
+  return (count & 1) == 0;
 }
 
 void I::execute(uint8_t ins) {
-	if(ins == 0xD1) {
-		POP_D();
-		return;
-	}
 	switch(ins) {
 		case 0x00: NOP(); break;
 		case 0x01: LXI_B(); break;
@@ -306,8 +303,9 @@ void I::NOP() {
 
 
 void I::LXI_B() {
-	c = read(pc++);
-	b = read(pc++);
+	uint8_t lo = read(pc++);
+	uint8_t hi = read(pc++);
+	SET_BC((hi << 8) | lo);
 }
 
 void I::STAX_B() {
@@ -316,23 +314,21 @@ void I::STAX_B() {
 
 void I::INX_B() {
 	SET_BC(BC() + 1);
-
 }
 
 void I::INR_B() {
 	uint16_t res = b + 1;
 	b = b + 1;
-	setFlag(Z, (res&0xff) == 0);
+	setFlag(Z, (res & 0xff) == 0);
 	setFlag(S, (res & 0x80) != 0);
-	setFlag(P, PARITY(res&0xff));
+	setFlag(P, PARITY(res & 0xff));
 }
 
 void I::DCR_B() {
-	uint16_t res = b - 1;
 	b = b - 1;
-	setFlag(Z, (res&0xff) == 0);
-	setFlag(S, (res & 0x80) != 0);
-	setFlag(P, PARITY(res&0xff));
+	setFlag(Z, (b&0xff) == 0);
+	setFlag(S, (b & 0x80) == 0x80);
+	setFlag(P, PARITY(b));
 }
 
 void I::MVI_B() {
@@ -340,16 +336,16 @@ void I::MVI_B() {
 }
 
 void I::RLC() {
-	uint8_t prevSig = (a & 0x80);
+	uint8_t prevSig = a >> 7;
 	a = a << 1;
-	a |= prevSig >> 7;
+	a |= prevSig;
 	setFlag(C, prevSig == 0x01);
 }
 
 void I::DAD_B() {
 	uint32_t res = HL() + BC();
 	setFlag(C, res > 0xFFFF);
-	SET_HL(res & 0xFFFF);
+	SET_HL(res);
 }
 
 void I::LDAX_B() {
@@ -369,11 +365,10 @@ void I::INR_C() {
 }
 
 void I::DCR_C() {
-	uint16_t res = c - 1;
 	c = c - 1;
-	setFlag(Z, (res & 0xFF) == 0);
-	setFlag(S, (res & 0x80) != 0);
-	setFlag(P, PARITY(res&0xff));
+	setFlag(Z, (c & 0xFF) == 0);
+	setFlag(S, (c & 0x80) != 0);
+	setFlag(P, PARITY(c ));
 }
 
 void I::MVI_C() {
@@ -384,7 +379,7 @@ void I::RRC() {
 	uint8_t prevBit = a & 0x01;
 	a >>= 1;
 	a |= (prevBit << 7);
-	setFlag(C, prevBit == 1);
+	setFlag(C, prevBit != 0);
 }
 
 /* ================================= 0x10 ---- 0x1f ================================ */
@@ -412,11 +407,10 @@ void I::INR_D() {
 }
 
 void I::DCR_D() {
-	uint16_t res = d - 1;
 	d = d - 1;
 	setFlag(Z, d == 0);
-	setFlag(S, (res & 0x80) != 0);
-	setFlag(P, PARITY(res&0xff));
+	setFlag(S, (d & 0x80) != 0);
+	setFlag(P, PARITY(d &0xff));
 }
 
 void I::MVI_D() {
@@ -424,11 +418,10 @@ void I::MVI_D() {
 }
 
 void I::RAL() {
-	uint8_t prev = getFlag(C);
-	uint8_t prevSig = a & 0x80;
-	a <<= 1;
-	a |= prev;
-	setFlag(C, prevSig != 0);
+	uint8_t cy = getFlag(C);
+	setFlag(C, a >> 7);
+	a = a << 1;
+	a |= cy;
 }
 
 // 0x18 // 
@@ -457,11 +450,10 @@ void I::INR_E() {
 }
 
 void I::DCR_E() {
-	uint16_t res = e - 1;
 	e = e - 1;
 	setFlag(Z, e == 0);
-	setFlag(S, (res & 0x80) != 0);
-	setFlag(P, PARITY(res&0xff));
+	setFlag(S, (e & 0x80) != 0);
+	setFlag(P, PARITY(e &0xff));
 }
 
 void I::MVI_E() {
@@ -469,9 +461,9 @@ void I::MVI_E() {
 }
 
 void I::RAR() {
-	uint8_t temp = a;
-	a = (getFlag(C) << 7) | (temp >> 1);
-	setFlag(C, temp & 1);
+	uint8_t cy = getFlag(C);
+	setFlag(C, a & 1);
+	a = (a >> 1) | (cy << 7);
 }
 
 /* ================================= 0x20 ---- 0x2f ================================ */
@@ -504,11 +496,10 @@ void I::INR_H() {
 }
 
 void I::DCR_H() {
-	uint16_t res = h - 1;
 	h = h - 1;
 	setFlag(Z, h == 0);
-	setFlag(S, (res & 0x80) != 0);
-	setFlag(P, PARITY(res&0xff));
+	setFlag(S, (h & 0x80) != 0);
+	setFlag(P, PARITY(h & 0xff));
 }
 
 void I::MVI_H() {
@@ -574,7 +565,7 @@ void I::LXI_SP() {
 void I::STA_ADR() {
 	uint8_t lo = read(pc++);
 	uint8_t hi = read(pc++);
-	uint8_t addr = (hi << 8) | lo;
+	uint16_t addr = (hi << 8) | lo;
 	write(addr, a);
 }
 
@@ -583,7 +574,7 @@ void I::INX_SP() {
 }
 
 void I::INR_M() {
-	uint32_t res = read(HL()) + 1;
+	uint16_t res = read(HL()) + 1;
 	write(HL(), read(HL()) + 1);
 	setFlag(Z, res == 0);
 	setFlag(S, (res & 0x80) != 0);
@@ -591,8 +582,8 @@ void I::INR_M() {
 }
 
 void I::DCR_M() {
-	uint32_t res = read(HL()) - 1;
-	write(HL(), read(HL()) - 1);
+	uint8_t res = read(HL()) - 1;
+	write(HL(), res);
 	setFlag(Z, res == 0);
 	setFlag(S, (res & 0x80) != 0);
 	setFlag(P, PARITY(res&0xff));
@@ -633,10 +624,9 @@ void I::INR_A() {
 
 void I::DCR_A() {
 	a = a - 1;
-	uint32_t res = a - 1;
-	setFlag(Z, res == 0);
-	setFlag(S, (res & 0x80) != 0);
-	setFlag(P, PARITY(res&0xff));
+	setFlag(Z, a == 0);
+	setFlag(S, (a & 0x80) != 0);
+	setFlag(P, PARITY(a));
 }
 
 void I::MVI_A() {
@@ -920,9 +910,9 @@ void I::MOV_A_A() {
 
 void I::ADD_B() {
 	uint16_t result = (uint16_t)a + (uint16_t)b;
-	a = a + b;
+	a = result;
 	setFlag(Z, a == 0);
-	setFlag(S, result & 0x80);
+	setFlag(S, a & 0x80);
 	setFlag(C, result > 0xff);
 	setFlag(P, PARITY(result&0xff));
 }
@@ -1002,7 +992,7 @@ void I::ADC_B() {
 
 void I::ADC_C() {
 	uint16_t cy = getFlag(C) ? 1 : 0;
-	uint16_t result = (uint16_t)a + (uint16_t)c + cy;
+	uint32_t result = (uint16_t)a + (uint16_t)c + cy;
 	a = result & 0xff;
 	setFlag(Z, a == 0);
 	setFlag(S, result & 0x80);
@@ -1015,9 +1005,9 @@ void I::ADC_D() {
 	uint16_t result = (uint16_t)a + (uint16_t)d + cy;
 	a = result & 0xff;
 	setFlag(Z, a == 0);
-	setFlag(S, result & 0x80);
+	setFlag(S, a & 0x80);
 	setFlag(C, result > 0xff);
-	setFlag(P, PARITY(result & 0xff ));
+	setFlag(P, PARITY(a));
 }
 
 void I::ADC_E() {
@@ -1231,7 +1221,7 @@ void I::ANA_B() {
 	 setFlag(Z, a==0);
 	 setFlag(S, a & 0x80);
 	 setFlag(C, false);
-	setFlag(P, PARITY(a));
+	 setFlag(P, PARITY(a));
 }
 
 void I::ANA_C() {
@@ -1284,7 +1274,7 @@ void I::ANA_M() {
 
 void I::ANA_A() {
 	 a &= a;
-	 setFlag(Z, a==0);
+	 setFlag(Z, a == 0);
 	 setFlag(S, a & 0x80);
 	 setFlag(C, false);
 	 setFlag(P, PARITY(a));
@@ -1611,7 +1601,21 @@ void I::JNC_ADR() {
 }
 
 void I::OUT_D() {
-	bus->out(read(pc++), a);
+	uint8_t port = read(pc++);
+	if(port == 0) {
+		exit(0);
+	} else if(port == 1) {
+		if(c == 2) {
+			printf("%c\n", e);
+		} else if(c == 9) {
+			uint16_t addr = DE();
+			do {
+				printf("%c", (char)read(addr++));
+			} while(read(addr) != '$');
+			printf("\n");
+		}
+	}
+	// bus->out(read(pc++), a);
 }
 
 void I::CNC_ADR() {
@@ -1670,12 +1674,13 @@ void I::CC_ADR() {
 }
 
 void I::SBI_D() {
-	uint8_t cyy = getFlag(C);
-	uint32_t result = (uint16_t)a - (uint16_t)b - cyy;
+	uint8_t cyy = getFlag(C) ? 1 : 0;
+	uint8_t data = read(pc++);
+	uint16_t result = (uint16_t)a - (uint16_t)data - cyy;
 	a = result & 0xff;
 	setFlag(Z, a == 0);
 	setFlag(S, a & 0x80);
-	setFlag(C, a < b);
+	setFlag(C, a < (data + cyy));
 	setFlag(P, PARITY(a));
 }
 
@@ -1727,10 +1732,11 @@ void I::ANI_D() {
 	 setFlag(Z, a==0);
 	 setFlag(S, a & 0x80);
 	 setFlag(C, false);
-	 setFlag(P, PARITY(P));
+	 setFlag(P, PARITY(a));
 }
 
 void I::RST_4() {
+	push16(pc);
 	pc = 0x0020;
 }
 
@@ -1775,6 +1781,7 @@ void I::XRI_D() {
 }
 
 void I::RST_5() {
+	push16(pc);
 	pc = 0x0028;
 }
 
@@ -1808,6 +1815,7 @@ void I::ORI_D() {
 }
 
 void I::RST_6() {
+	push16(pc);
 	pc = 0x0030;
 }
 
@@ -1816,7 +1824,7 @@ void I::RM() {
 }
 
 void I::SPHL() {
-	pc = HL();
+	sp = HL();
 }
 
 void I::JM_ADR() {
@@ -1835,7 +1843,11 @@ void I::EI() {
 }
 
 void I::CM_ADR() {
-	pc += 2;
+	if(getFlag(S)) {
+		CALL();
+	} else {
+		pc+=2;
+	}
 }
 
 void I::CPI_D() {
@@ -1848,6 +1860,7 @@ void I::CPI_D() {
 }
 
 void I::RST_7() {
+	push16(pc);
 	pc = 0x0038;
 }
 

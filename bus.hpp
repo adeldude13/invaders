@@ -12,7 +12,7 @@ class Bus {
 		Bus(char *name, int width, int height, uint8_t *data, uint16_t);
 		uint8_t read(uint16_t);
 		void write(uint16_t addr, uint8_t b);
-		void run();
+		void run(uint32_t);
 		void draw();
 		void input();
 		uint8_t in(int);
@@ -23,6 +23,7 @@ class Bus {
 		I8080 *cpu = nullptr;
 		Graphics *graphics;
 		uint8_t shift_offset, shift1, shift0;
+		uint8_t next_INT = 0xCF;
 };
 
 #endif

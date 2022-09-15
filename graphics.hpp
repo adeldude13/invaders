@@ -9,8 +9,8 @@
 class Graphics {
 	public:
 		Graphics(char *, int, int, int, int);
-		void draw(uint8_t *);
-		void render();
+		void draw(uint8_t *), render();
+		void update();
 	private:
 		SDL_Window *window;
 		SDL_Renderer *renderer;

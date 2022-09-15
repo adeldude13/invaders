@@ -1,6 +1,8 @@
 #include "i8080.hpp"
+#include <iostream>
+#include <stdio.h>
 
-uint8_t OPCODES_CYCLES[256] = {
+int OPCODES_CYCLES[256] = {
     4, 10, 7,  5,  5,  5,  7,  4,  4, 10, 7,  5,  5,  5,  7, 4, 
     4, 10, 7,  5,  5,  5,  7,  4,  4, 10, 7,  5,  5,  5,  7, 4, 
     4, 10, 16, 5,  5,  5,  7,  4,  4, 10, 16, 5,  5,  5,  7, 4, 
@@ -21,6 +23,9 @@ uint8_t OPCODES_CYCLES[256] = {
 
 I8080::I8080(Bus *b) {
 	bus = b;
+	pc = 0x100;
+	sp = 0x0000;
+	f = 1 << 1;
 }
 
 void I8080::setFlag(Flags flag, bool b) {
@@ -99,26 +104,27 @@ void I8080::SET_HL(uint16_t val) {
 	l = val & 0xff;
 }
 
-int I8080::run(uint64_t n) {
-	cycles = 0;
-	int count = 0;
-	while(cycles < n) {
-		if(pc > 0x3fff) {
-			running = false;
-			return 0;
-		}
-		uint8_t opcode = read(pc++);
-		this->execute(opcode);
-		cycles += (uint64_t)OPCODES_CYCLES[opcode];
-		count++;
+int I8080::step() {
+	if(halted) {
+		std::cout << "Halted" << std::endl;
+		return 0;
 	}
-	return 0;
+	uint8_t opcode;
+	ran++;
+	opcode = read(pc++);
+	this->execute(opcode);
+	cycles += (uint64_t)OPCODES_CYCLES[opcode];
+	return OPCODES_CYCLES[opcode];
 }
 
-void I8080::interrupt(int n) {
+void I8080::interrupt(uint8_t n) {
 	if(INT) {
 		push16(pc);
-		INT = false;
 		pc = n;
+		INT = false;
 	}
+}
+
+void I8080::dump() {
+	printf("PC: %04X, AF: %04X, BC: %04X, DE: %04X, HL: %04X, SP: %04X, CYC: %d\n", pc, AF(), BC(), DE(), HL(), sp, cycles);
 }

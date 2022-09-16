@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
 	}
 	uint8_t *code = readfile(argv[1]);
 
-	Bus bus = Bus((char*)"test", WIN_WIDTH, WIN_HEIGHT, code, size);
+	Bus bus = Bus((char*)"Invaders", WIN_WIDTH, WIN_HEIGHT, code, size);
 	uint32_t curr = SDL_GetTicks(); 
 	uint32_t last = SDL_GetTicks();
 	 while(1) {

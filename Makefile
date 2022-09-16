@@ -1,10 +1,10 @@
 CC := clang++
-CFILES := main.cpp i8080.cpp instructions.cpp bus.cpp graphics.cpp
-HFILES := i8080.hpp bus.hpp graphics.hpp
+CFILES := src/main.cpp src/i8080.cpp src/instructions.cpp src/bus.cpp src/graphics.cpp
+HFILES := src/i8080.hpp src/bus.hpp src/graphics.hpp
 FILES := $(CFILES) $(HFILES) Makefile
-OUT := main
+OUT := bin/main
 LIBS := `pkg-config --cflags --libs sdl2`
-ARGS := $(LIBS) -O0 -ggdb3 -Wall -Wextra -o $(OUT)
+ARGS := $(LIBS) -O3 -Wall -Wextra -o $(OUT)
 
 main: $(FILES)
 	$(CC) $(ARGS) $(CFILES)

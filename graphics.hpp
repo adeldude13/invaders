@@ -8,7 +8,7 @@
 
 class Graphics {
 	public:
-		Graphics(char *, int, int, int, int);
+		Graphics(char *, int, int);
 		void draw(uint8_t *), render();
 		void update();
 	private:

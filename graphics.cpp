@@ -9,7 +9,7 @@
 	std::cout << m << ": " << SDL_GetError() << std::endl; \
 	exit(1); \
 } while(0)
-Graphics::Graphics(char *title, int ww, int wh, int vw, int vh) {
+Graphics::Graphics(char *title, int ww, int wh) {
 	if(SDL_Init(SDL_INIT_VIDEO) != 0) {
 		REPORT("SDL Failed To Init");
 	}
@@ -23,11 +23,11 @@ Graphics::Graphics(char *title, int ww, int wh, int vw, int vh) {
 	if(renderer == NULL) {
 		REPORT("Failed to Create Renderer");
 	}
-	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, vw, vh);
+	texture = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA32, SDL_TEXTUREACCESS_STREAMING, WIDTH, HEIGHT);
 	if(texture == NULL) {
 		REPORT("Failed to Create Texture");
 	}
-	SDL_RenderSetLogicalSize(renderer, vw, vh);
+	SDL_RenderSetLogicalSize(renderer, WIDTH, HEIGHT);
 
 }
 #undef REPORT

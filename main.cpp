@@ -1,8 +1,8 @@
 #include <iostream>
 #include <inttypes.h>
 #include <stdlib.h>
-#include "bus.hpp"
 #include <SDL2/SDL.h>
+#include "bus.hpp"
 
 #define WIN_WIDTH 1000
 #define WIN_HEIGHT 600

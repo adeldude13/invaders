@@ -126,5 +126,5 @@ void I8080::interrupt(uint8_t n) {
 }
 
 void I8080::dump() {
-	printf("PC: %04X, AF: %04X, BC: %04X, DE: %04X, HL: %04X, SP: %04X, CYC: %d\n", pc, AF(), BC(), DE(), HL(), sp, cycles);
+	printf("PC: %04X, AF: %04X, BC: %04X, DE: %04X, HL: %04X, SP: %04X, CYC: %lu\n", pc, AF(), BC(), DE(), HL(), sp, cycles);
 }

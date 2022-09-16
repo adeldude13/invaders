@@ -13,7 +13,7 @@ Bus::Bus(char *name, int width, int height, uint8_t *code, uint16_t a) {
 	shift_offset = 0;
 	shift1 = 0;
 	shift0 = 0;
-	graphics = new Graphics(name, width, height, 224, 256);
+	graphics = new Graphics(name, width, height);
 	cpu = new I8080(this); // pass this bus to the cpu
 	int i;
 	for(i=0; i<a;i++) {

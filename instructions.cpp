@@ -1297,10 +1297,11 @@ void I::XRA_C() {
 }
 
 void I::XRA_D() {
-	 a ^= c;
-	 setFlag(Z, a==0);
-	 setFlag(S, a & 0x80);
-	 setFlag(C, false);
+	uint8_t v = read(pc++);
+	a ^= v;
+	setFlag(Z, a==0);
+	setFlag(S, a & 0x80);
+	setFlag(C, false);
 	setFlag(P, PARITY(a));
 }
 

@@ -1691,9 +1691,9 @@ void I::RST_3() {
 
 void I::RPO() {
 	if(!getFlag(P)) {
-		uint8_t lo = read(pc++);
-		uint8_t hi = read(pc++);
-		pc = (hi << 8) | (lo);
+		RET();
+	} else {
+		pc+=2;
 	}
 }
 

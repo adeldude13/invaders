@@ -1632,11 +1632,11 @@ void I::PUSH_D() {
 
 void I::SUI_D() {
 	uint8_t t = read(pc++);
+	setFlag(C, a < t);
 	uint16_t result = (uint16_t)a - (uint16_t)t;
 	a = result & 0xff;
 	setFlag(Z, a == 0);
 	setFlag(S, a & 0x80);
-	setFlag(C, a < t);
 	setFlag(P, PARITY(a));
 }
 
@@ -1680,7 +1680,7 @@ void I::SBI_D() {
 	a = result & 0xff;
 	setFlag(Z, a == 0);
 	setFlag(S, a & 0x80);
-	setFlag(C, a < (data + cyy));
+	setFlag(C, result > 0xff);
 	setFlag(P, PARITY(a));
 }
 
@@ -1820,7 +1820,9 @@ void I::RST_6() {
 }
 
 void I::RM() {
-	pc+=2;	
+	if(getFlag(S)) {
+		RET();
+	}
 }
 
 void I::SPHL() {
@@ -1870,9 +1872,7 @@ void I::DI() {
 
 void I::CP_ADR() {
 	if(getFlag(P)) {
-		uint8_t lo = read(pc++);
-		uint8_t hi = read(pc++);
-		pc = (hi << 8) | lo;
+		CALL();
 	} else {
 		pc += 2;
 	}

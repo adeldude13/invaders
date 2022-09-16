@@ -1692,8 +1692,6 @@ void I::RST_3() {
 void I::RPO() {
 	if(!getFlag(P)) {
 		RET();
-	} else {
-		pc+=2;
 	}
 }
 

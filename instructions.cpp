@@ -1297,8 +1297,7 @@ void I::XRA_C() {
 }
 
 void I::XRA_D() {
-	uint8_t v = read(pc++);
-	a ^= v;
+	a ^= d;
 	setFlag(Z, a==0);
 	setFlag(S, a & 0x80);
 	setFlag(C, false);

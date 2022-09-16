@@ -8,28 +8,20 @@
 #define CYCLES_PER_FRAME (CLOCK_SPEED / FPS)
 
 Bus::Bus(char *name, int width, int height, uint8_t *code, uint16_t a) {
-	// ports[0] = 0;
-	// ports[1] = 0;
-	// shift_offset = 0;
-	// shift1 = 0;
-	// shift0 = 0;
-	// graphics = new Graphics(name, width, height, 224, 256);
+	ports[0] = 0;
+	ports[1] = 0;
+	shift_offset = 0;
+	shift1 = 0;
+	shift0 = 0;
+	graphics = new Graphics(name, width, height, 224, 256);
 	cpu = new I8080(this); // pass this bus to the cpu
 	int i;
-	for(i=0x100; i<a+0x100;i++) {
-		memory[i] = code[i-0x100];
+	for(i=0; i<a;i++) {
+		memory[i] = code[i];
 	}
-	for(i=0;i<0x100;i++){
-		memory[i] = 0;	
-	}
-	for(i=a+0x100;i<0x10000;i++){
+	for(i=a;i<0x10000;i++){
 		memory[i] = 0;
 	}
-	memory[0x0000] = 0xD3;
-  memory[0x0001] = 0x00;
-	memory[0x0005] = 0xD3;
-  memory[0x0006] = 0x01;
-  memory[0x0007] = 0xC9;
 }
 
 uint8_t Bus::read(uint16_t addr) {
@@ -72,24 +64,20 @@ void Bus::input() {
 }
 
 void Bus::run(uint32_t dt) {
-	// this->input();
-	// uint64_t count = 0;
-	// while(count < (dt * CLOCK_SPEED / 1000)) {
-	// 	count += cpu->step();
-	// 	if(cpu->cycles >= CYCLES_PER_FRAME / 2) {
-	// 		cpu->cycles -= CYCLES_PER_FRAME / 2;
-	// 		if(next_INT == 0x10) {
-	// 			graphics->draw(&memory[0]);
-	// 		}
-	// 		cpu->interrupt(next_INT);
-	// 		next_INT = (next_INT == 0x08) ? 0x10 : 0x08;
-	// 	}
-	// }
-	// graphics->update();
-	while(1) {
-		cpu->dump();
-		cpu->step();
+	this->input();
+	uint64_t count = 0;
+	while(count < (dt * CLOCK_SPEED / 1000)) {
+		count += cpu->step();
+		if(cpu->cycles >= CYCLES_PER_FRAME / 2) {
+			cpu->cycles -= CYCLES_PER_FRAME / 2;
+			if(next_INT == 0x10) {
+				graphics->draw(&memory[0]);
+			}
+			cpu->interrupt(next_INT);
+			next_INT = (next_INT == 0x08) ? 0x10 : 0x08;
+		}
 	}
+	graphics->update();
 }
 
 

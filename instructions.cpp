@@ -507,7 +507,23 @@ void I::MVI_H() {
 }
 
 void I::DAA() {
-	// TODO
+	uint8_t cy = getFlag(C) ? 1 : 0;
+	uint8_t correction = 0x00;
+	uint8_t lsb = a & 0x0f;
+	uint8_t msb = a >> 4;
+	if(lsb > 9) {
+		correction += 0x06;
+	}
+	if(cy || msb > 9 || (msb >= 9 && lsb > 9)) {
+		correction += 0x60;
+		cy = 1;
+	}
+	uint16_t result = correction + a;
+	a = result;
+	setFlag(Z, result == 0);
+	setFlag(S, result & 0xff);
+	setFlag(P, PARITY(P));
+	setFlag(C, cy);
 }
 
 void I::DAD_H() {
@@ -1601,21 +1617,7 @@ void I::JNC_ADR() {
 }
 
 void I::OUT_D() {
-	uint8_t port = read(pc++);
-	if(port == 0) {
-		exit(0);
-	} else if(port == 1) {
-		if(c == 2) {
-			printf("%c\n", e);
-		} else if(c == 9) {
-			uint16_t addr = DE();
-			do {
-				printf("%c", (char)read(addr++));
-			} while(read(addr) != '$');
-			printf("\n");
-		}
-	}
-	// bus->out(read(pc++), a);
+	bus->out(read(pc++), a);
 }
 
 void I::CNC_ADR() {

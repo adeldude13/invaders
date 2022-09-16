@@ -34,11 +34,10 @@ int main(int argc, char **argv) {
 	Bus bus = Bus((char*)"test", WIN_WIDTH, WIN_HEIGHT, code, size);
 	uint32_t curr = SDL_GetTicks(); 
 	uint32_t last = SDL_GetTicks();
-	bus.run(0);
-	// while(1) {
-	// 	curr = SDL_GetTicks();
-	// 	bus.run(curr-last);
-	// 	last = curr;
-	// }
+	 while(1) {
+	 	curr = SDL_GetTicks();
+	 	bus.run(curr-last);
+	 	last = curr;
+	 }
 	return 0;
 }

@@ -46,12 +46,6 @@ void Bus::input() {
 				case SDLK_w: ports[0] |=      0x10; break; // player one shoot
 				case SDLK_a: ports[0] |=      0x20; break; // player one left
 				case SDLK_d: ports[0] |=      0x40; break; // player one right
-																							
-																							
-				case SDLK_2: ports[1] |=      0x02; break; // player two start
-				case SDLK_UP: ports[1] |=     0x10; break; // player two Shoot
-				case SDLK_LEFT: ports[1] |=   0x20; break; // Player two left
-				case SDLK_RIGHT: ports[1] |=  0x40; break; // Player Two Right
 			}
 		}
 		if(event.type == SDL_KEYUP) {
@@ -61,11 +55,6 @@ void Bus::input() {
 				case SDLK_w: ports[0] &=     ~0x10; break; // player one shoot
 				case SDLK_a: ports[0] &=     ~0x20; break; // player one left
 				case SDLK_d: ports[0] &=     ~0x40; break; // player one right
-
-				case SDLK_2: ports[1] |=     ~0x02; break; // player two start
-				case SDLK_UP: ports[1] |=    ~0x10; break; // player two Shoot
-				case SDLK_LEFT: ports[1] |=  ~0x20; break; // Player two left
-				case SDLK_RIGHT: ports[1] |= ~0x40; break; // Player Two Right
 			}
 		}
 	}
